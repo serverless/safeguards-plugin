@@ -1,3 +1,4 @@
+
 # Safeguards
 
 **Safeguards** is a policy-as-code framework for Serverless Framework which enables you to inspect your `serverless.yml` file, and the generated Cloud Formation templates, for compliance with security, operational, and organizational, best practices. Safeguards are made available as a stand-alone Serverless Framework plugin with no external dependencies.
