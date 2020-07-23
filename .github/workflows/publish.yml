@@ -29,17 +29,10 @@ jobs:
           node-version: 14.x
           registry-url: https://registry.npmjs.org
 
-      # Note: No need to install dependencies as we have retrieved cached `node_modules` for very
-      #       same `package.json` as stored with recent `master `build
-
-      - name: Build
-        run: npm run build
-
       - name: Publish new version
         # Note: Setting NODE_AUTH_TOKEN as job|workspace wide env var won't work
         #       as it appears actions/setup-node sets own value
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd dist
           npm publish

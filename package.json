@@ -12,8 +12,8 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "cover": "nyc npm test",
-    "test": "mocha \"!(node_modules|dist)/**/*.test.js\"",
-    "test:isolated": "mocha-isolated \"!(node_modules|dist)/**/*.test.js\"",
+    "test": "mocha \"!(node_modules)/**/*.test.js\"",
+    "test:isolated": "mocha-isolated \"!(node_modules)/**/*.test.js\"",
     "lint": "eslint .",
     "lint:staged": "lint-staged",
     "lint:updated": "pipe-git-updated --ext=js -- eslint",
@@ -33,9 +33,6 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
     "@serverless/eslint-config": "^2.1.1",
     "@serverless/test": "^4.3.2",
     "chai": "^4.2.0",
@@ -72,7 +69,6 @@
   "eslintIgnore": [
     "!/.github",
     "/coverage",
-    "/dist",
     "/node_modules"
   ],
   "lint-staged": {
@@ -89,7 +85,6 @@
       "**/*.test.js",
       ".github/**",
       "coverage/**",
-      "dist/**",
       "examples/**",
       "integration-testing/**",
       "node_modules/**",
