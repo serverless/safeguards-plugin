@@ -7,3 +7,4 @@ examples
 src/*
 .eslintignore
 prettier.config.js
+.github
