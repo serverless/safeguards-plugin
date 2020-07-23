@@ -132,6 +132,14 @@ jobs:
       - name: Unit tests
         run: npm run cover
 
+      - name: Push coverage
+        # TODO: Remove inline token, once support for GA is added on Codecov side
+        # See: https://github.com/codecov/codecov-node/issues/118
+        env:
+          CODECOV_TOKEN: 3b50eec8-52a9-4052-857d-613a91b55917
+        run: |
+          npx codecov
+
   linuxNode10:
     name: '[Linux] Node.js v10: Isolated unit tests'
     runs-on: ubuntu-latest
