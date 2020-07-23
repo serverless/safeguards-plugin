@@ -9,6 +9,9 @@
   "engines": {
     "node": ">=10.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "./scripts/build.sh",
     "cover": "nyc npm test",
