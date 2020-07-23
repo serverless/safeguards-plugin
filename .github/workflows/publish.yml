@@ -9,10 +9,6 @@ jobs:
   npmPublish:
     name: Publish to npm
     runs-on: ubuntu-latest
-    env:
-      # It'll work with secrets.GITHUB_TOKEN (which is provided by GitHub unconditionally)
-      # Still then release author would be "github-actions". It's better if it's dedicated repo bot
-      GITHUB_TOKEN: ${{ secrets.USER_GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
