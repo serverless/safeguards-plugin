@@ -5,3 +5,5 @@ __snapshots__
 coverage
 examples
 src/*
+.eslintignore
+prettier.config.js
