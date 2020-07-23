@@ -48,11 +48,6 @@ jobs:
         run: |
           npm update --no-save
           npm update --save-dev --no-save
-      - name: Install sdk-js dependencies
-        if: steps.cacheSdkJsNodeModules.outputs.cache-hit != 'true'
-        run: |
-          cd sdk-js
-          npm ci
       - name: Validate formatting
         run: npm run prettier-check:updated
       - name: Validate lint rules
