@@ -1,0 +1,7 @@
+.DS_Store
+*.test.js
+__mocks__
+__snapshots__
+coverage
+examples
+src/*
