@@ -1,4 +1,3 @@
-
 # Safeguards
 
 **Safeguards** is a policy-as-code framework for Serverless Framework which enables you to inspect your `serverless.yml` file, and the generated Cloud Formation templates, for compliance with security, operational, and organizational, best practices. Safeguards are made available as a stand-alone Serverless Framework plugin with no external dependencies.
@@ -100,14 +99,14 @@ Serverless: Safeguards Results:
 
    Summary --------------------------------------------------
 
-   passed - require-dlq
-   passed - allowed-runtimes
-   passed - no-secret-env-vars
-   passed - allowed-stages
-   failed - require-cfn-role
-   passed - allowed-regions
-   passed - framework-version
-   failed - no-wild-iam-role-statements
+   passed  - require-dlq
+   passed  - allowed-runtimes
+   passed  - no-secret-env-vars
+   passed  - allowed-stages
+   failed  - require-cfn-role
+   passed  - allowed-regions
+   passed  - framework-version
+   failed  - no-wild-iam-role-statements
 
    Details --------------------------------------------------
 
@@ -121,7 +120,7 @@ Serverless: Safeguards Results:
       Prevent "*" permissions being used in AWS IAM Roles by checking for wildcards on Actions and Resources in grant statements.
 
 
-Serverless: Safeguards Summary: 6 passed, 0 warnings, 2 errors
+Serverless: Safeguards Summary: 6 passed, 0 warnings, 2 errors, 0 skipped
 ...
 ```
 
