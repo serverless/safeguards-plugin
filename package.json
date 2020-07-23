@@ -9,6 +9,7 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "test": "mocha \"!(node_modules)/**/*.test.js\"",
+    "test:isolated": "mocha-isolated \"!(node_modules|integration-testing|dist|sdk-js)/**/*.test.js\" \"*.test.js\"",
     "lint": "eslint .",
     "lint:staged": "lint-staged",
     "lint:updated": "pipe-git-updated --ext=js -- eslint",
@@ -33,6 +34,7 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/register": "^7.10.5",
     "@serverless/eslint-config": "^2.1.1",
+    "@serverless/test": "^4.3.2",
     "chai": "^4.2.0",
     "eslint": "^7.5.0",
     "eslint-plugin-import": "^2.22.0",
