@@ -7,7 +7,7 @@
   "author": "",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=6.0"
+    "node": ">=10.0"
   },
   "scripts": {
     "build": "./scripts/build.sh",
@@ -36,7 +36,6 @@
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
-    "@babel/register": "^7.10.5",
     "@serverless/eslint-config": "^2.1.1",
     "@serverless/test": "^4.3.2",
     "chai": "^4.2.0",
