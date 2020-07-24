@@ -23,7 +23,7 @@ async function runPolicies(ctx) {
       safeguardName: policy.safeguard,
       safeguardConfig: policy.config,
       enforcementLevel: policy.enforcementLevel || 'error',
-      title: policy.title || `Policy: ${safeguardName}`,
+      title: policy.title || `Policy: ${policy.safeguard}`,
       description: policy.description,
       stage: policy.stage,
     };

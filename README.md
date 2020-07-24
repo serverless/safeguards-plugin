@@ -148,7 +148,7 @@ functions:
     handler: handler.hello
 
 plugins:
-  - serverless-safeguards-plugin
+  - @serverless/safeguards-plugin
 
 custom:
   safeguards:
@@ -171,14 +171,43 @@ custom:
 
 ## Migrating from Serverless Framework Pro
 
-Serverless Framework Pro also supported safeguards which you can configure in the dashboard; however, this feature has been open source and repackaged in this plugin. Here is how you can migrate your existing configuration in SF Pro to use the serverless-safeguards-plugin instead.
+Serverless Framework Pro safeguards have been open source and repackaged in this plugin. Here is how you can migrate your existing configuration in SF Pro to use the `@serverless/safeguards-plugin` instead.
 
-In Serverless Framework Pro, the safeguards are added to deployment profiles. Each deployment profile then can be associated with an individual stage in an app. It can also be assocaited with the _default_ stage in the app. In the serverless-safeguards-plugin, policies are added to individual services and can be configured for a subset of stages.
+#### How safeguards work in Serverless Framework Pro
 
-### Migration steps:
+- Safeguard policies are added to deployment profiles.
+- Each deployment profile then can be associated with an individual stage in an app.
+- A deployment profile can also be assocaited with the _default_ stage in the app.
 
-1. Install the `serverless-safeguard-plugin` to every project which used the Serverless Framework Pro safeguards.
-2. For each policy defined in the SF Pro dashboard, copy the configuration (name, description, enforcement level, config), into the `custom.safeguards` of your `serverless.yml`. The fields from the Safeguard Policies in the SF Pro dashboard match 1-1 with the fields in the serverless-safeguards-plugin, so it should be as easy as copy-pasting.
+#### How safeguard work in @serverless/safeguards-plugin
+
+- Safeguard policies are added to each `serverless.yml` file under `custom.safeguards`.
+- Safeguard policies are associated with stages by setting the `stage` field of each policy.
+
+#### Breaking change
+
+The breaking change is best described with the example below. Suppose you have an app with two stages configured, dev and prod. You also have a default
+stage which has some safeguard policies.
+
+- default
+- dev
+- prod
+
+In Serverless Framework Pro, if you deploy to one of the two stages (`dev` or `prod`) then the safegurad policies from the `default` stage
+willl NOT run. However, with `@serverless/safeguards-plugin`, you specify default policies by not setting the `stage` field, in which case, the
+default policies will also run.
+
+### Automatic Migration
+
+1. [Install the `@serverless/safeguard-plugin`](#installation) to every serverless.yml which uses the Serverless Framework Pro safeguards.
+2. Run `serverless safeguards export` from the working directory of the project.
+3. Copy the generated YAML into the `serverless.yml`.
+4. Delete the safeguards from the deployment profiles in Serverless Framework Pro.
+
+### Manually Migration
+
+1. [Install the `@serverless/safeguard-plugin`](#installation) to every serverless.yml which uses the Serverless Framework Pro safeguards.
+2. For each policy defined in the SF Pro dashboard, copy the configuration (name, description, enforcement level, config), into the `custom.safeguards` of your `serverless.yml`. The fields from the Safeguard Policies in the SF Pro dashboard match 1-1 with the fields in the `@serverless/safeguards-plugin`, so it should be as easy as copy-pasting.
 3. Set the `stage` field of each policy in `serverless.yml` to match the stage names used in the app. For example, if you had a policy `allowed-regions` in the deployment profile and it was associated with the `prod` stage, then add the field `stage: prod` to the policy in the `serverless.yml`.
 4. In SF Pro you have the ability to define stages (e.g. `prod`, `qa`) or use the `default` stage. The default stage is used to enforce safeguard policies from the deployment profile on any stages that don't match the other defined stages. For example, if you have `prod` and `qa` defined, but you deploy to `feature-x`, then the policies associated with the `default` stage will be used. For these policies, do not set the `stage` field, which will cause those policies to be enforced on all stages. At the moment, there isn't a way to define a blacklist for the stages.
 
