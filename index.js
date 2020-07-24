@@ -1,3 +1,5 @@
+'use strict';
+
 const runPolicies = require('./safeguards');
 const { getApp, getDeployProfiles } = require('@serverless/platform-sdk');
 const chalk = require('chalk');
@@ -59,20 +61,20 @@ class ServerlessSafeguardPlugin {
     const exportedSafeguardConfig = [];
 
     if (!orgName) {
-      console.log(
+      this.sls.cli.log(
         chalk.red('You must specify an org in your serverless.yml or use the --org option')
       );
       process.exit(-1);
     }
     if (!appName) {
-      console.log(
+      this.sls.cli.log(
         chalk.red('You must specify an app in your serverless.yml or use the --app option')
       );
       process.exit(-1);
     }
     if (!accessKey) {
-      console.log(chalk.red('You must set the SERVERLESS_ACCESS_KEY environment variable'));
-      console.log(
+      this.sls.cli.log(chalk.red('You must set the SERVERLESS_ACCESS_KEY environment variable'));
+      this.sls.cli.log(
         `You can get an access key from https://app.serverless.com/${orgName}/settings/accessKeys`
       );
       process.exit(-1);
@@ -99,8 +101,8 @@ class ServerlessSafeguardPlugin {
         tenant: orgName,
       });
     } catch (err) {
-      console.log(chalk.red('Failed to get the deployment profile for unknown reason'));
-      console.log(err);
+      this.sls.cli.log(chalk.red('Failed to get the deployment profile for unknown reason'));
+      this.sls.cli.log(err);
       process.exit(-1);
     }
 
@@ -135,7 +137,7 @@ class ServerlessSafeguardPlugin {
            * By not defining the stage, the policy will apply to all stages.
            */
           if (stage !== 'default') {
-            policySetting['stage'] = stage;
+            policySetting.stage = stage;
           }
           exportedSafeguardConfig.push(policySetting);
         });
@@ -143,7 +145,7 @@ class ServerlessSafeguardPlugin {
     });
 
     const content = {
-      plugins: [`@serverless/safeguards-plugin`],
+      plugins: ['@serverless/safeguards-plugin;'],
       custom: {
         safeguards: exportedSafeguardConfig,
       },
@@ -151,20 +153,20 @@ class ServerlessSafeguardPlugin {
 
     const generatedYaml = yml.stringify(content, 10, 2);
 
-    console.log(
+    this.sls.cli.log(
       chalk.yellow(
         'To migrate safeguards from Serverless Framework Pro dashboard to the @severless/safeguards-plugin:'
       )
     );
-    console.log(chalk.yellow('    1. Add the YAML below into your serverless.yml'));
-    console.log(chalk.yellow('    2. Delete the safeguards from the deployment profiles'));
-    console.log(
+    this.sls.cli.log(chalk.yellow('    1. Add the YAML below into your serverless.yml'));
+    this.sls.cli.log(chalk.yellow('    2. Delete the safeguards from the deployment profiles'));
+    this.sls.cli.log(
       chalk.yellow(
         '    3. If you are not using other SF Pro features, then you can also remove the `org` and `app` fields from serverless.com'
       )
     );
-    console.log('\n-----\n');
-    console.log(generatedYaml);
+    
+    this.sls.cli.log(`\n\n${chalk.reset(generatedYaml)}`);
   }
 }
 
