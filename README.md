@@ -25,18 +25,18 @@
 To install **automatically** run this single command:
 
 ```
-serverless plugin install --name serverless-safeguards-plugin
+serverless plugin install --name @serverless/safeguards-plugin
 ```
 
 To install **manually**, run this command,
 
-`npm i serverless-safeguards-plugin --save-dev`
+`npm i @serverless/safeguards-plugin --save-dev`
 
 and add this to your `serverless.yml`:
 
 ```yaml
 plugins:
-  - serverless-safeguards-plugin
+  - '@serverless/safeguards-plugin'
 ```
 
 ## Defining Policies
