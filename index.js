@@ -165,7 +165,7 @@ class ServerlessSafeguardPlugin {
         '    3. If you are not using other SF Pro features, then you can also remove the `org` and `app` fields from serverless.com'
       )
     );
-    
+
     this.sls.cli.log(`\n\n${chalk.reset(generatedYaml)}`);
   }
 }
