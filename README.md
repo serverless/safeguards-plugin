@@ -30,7 +30,7 @@ serverless plugin install --name @serverless/safeguards-plugin
 
 To install **manually**, run this command,
 
-`npm i `@serverless/safeguards-plugin` --save-dev`
+`npm i @serverless/safeguards-plugin --save-dev`
 
 and add this to your `serverless.yml`:
 
@@ -174,12 +174,13 @@ custom:
 Serverless Framework Pro safeguards have been open source and repackaged in this plugin. Here is how you can migrate your existing configuration in SF Pro to use the `@serverless/safeguards-plugin` instead.
 
 #### How safeguards work in Serverless Framework Pro
+
 - Safeguard policies are added to deployment profiles.
 - Each deployment profile then can be associated with an individual stage in an app.
 - A deployment profile can also be assocaited with the _default_ stage in the app.
 
-
 #### How safeguard work in @serverless/safeguards-plugin
+
 - Safeguard policies are added to each `serverless.yml` file under `custom.safeguards`.
 - Safeguard policies are associated with stages by setting the `stage` field of each policy.
 
