@@ -13,6 +13,8 @@ class ServerlessSafeguardPlugin {
     this.state = {};
 
     this.beforeDeployResources = this.beforeDeployResources.bind(this);
+    this.doValidate = this.doValidate.bind(this);
+    this.doPackage = this.doPackage.bind(this);
     this.export = this.export.bind(this);
 
     this.commands = {
@@ -40,6 +42,11 @@ class ServerlessSafeguardPlugin {
               },
             },
           },
+          validate: {
+            lifecycleEvents: ['validate'],
+            usage: 'Validate the config against policy',
+            options: {},
+          },
         },
       },
     };
@@ -47,10 +54,22 @@ class ServerlessSafeguardPlugin {
     this.hooks = {
       'before:deploy:deploy': this.beforeDeployResources,
       'safeguards:export:export': this.export,
+      'before:safeguards:validate:validate': this.doPackage,
+      'safeguards:validate:validate': this.doValidate,
     };
   }
 
   beforeDeployResources() {
+    runPolicies(this);
+  }
+
+  async doPackage() {
+    // must ensure packaging is done before doing policy
+    if (!this.options.package && !this.sls.service.package.path) {
+      await this.sls.pluginManager.spawn('package');
+    }
+  }
+  doValidate() {
     runPolicies(this);
   }
 

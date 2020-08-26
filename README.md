@@ -9,6 +9,7 @@
 - **Configurable** - Safeguards are implemented to accept configuration as input so you can customize the policies for each safeguard.
 - **Proactive** - Safeguards are evaluated _before_ any infrastructure is provisioned by evaluating the generated cloud formation template and serverless.yml.
 - **Environment-specific** - Policies can be associated with stages you can enforce different policies on development environments and production environments.
+- **Independent** - While policies will get run when you deploy, you can run and validate the policies as a standalone without deploying.
 
 ## Docs
 
@@ -90,6 +91,8 @@ The policy checks are performed as a part of the `serverless deploy` command.
 This will load the safeguard settings from the `serverless.yml` file to
 determine which policies to evaluate.
 
+In addition, you can simply validate the configuration without doing a deploy.
+
 **Example deploy**
 
 ```
@@ -122,6 +125,39 @@ Serverless: Safeguards Results:
 
 Serverless: Safeguards Summary: 6 passed, 0 warnings, 2 errors
 ...
+```
+
+**Example standalone validate**
+
+```
+$ sls safeguards validate
+...
+Serverless: Safeguards Results:
+
+   Summary --------------------------------------------------
+
+   passed - require-dlq
+   passed - allowed-runtimes
+   passed - no-secret-env-vars
+   passed - allowed-stages
+   failed - require-cfn-role
+   passed - allowed-regions
+   passed - framework-version
+   failed - no-wild-iam-role-statements
+
+   Details --------------------------------------------------
+
+   1) Failed - no cfnRole set
+      details: https://git.io/fhpFZ
+      Require the cfnRole option, which specifies a particular role for CloudFormation to assume while deploying.
+
+
+   2) Failed - iamRoleStatement granting Resource='*'. Wildcard resources in iamRoleStatements are not permitted.
+      details: https://git.io/fjfk7
+      Prevent "*" permissions being used in AWS IAM Roles by checking for wildcards on Actions and Resources in grant statements.
+
+
+Serverless: Safeguards Summary: 6 passed, 0 warnings, 2 errors
 ```
 
 ### Policy check results
