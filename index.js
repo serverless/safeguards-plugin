@@ -145,7 +145,7 @@ class ServerlessSafeguardPlugin {
     });
 
     const content = {
-      plugins: ['@serverless/safeguards-plugin;'],
+      plugins: ['@serverless/safeguards-plugin'],
       custom: {
         safeguards: exportedSafeguardConfig,
       },
