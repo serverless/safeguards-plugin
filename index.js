@@ -1,6 +1,6 @@
 'use strict';
 
-const runPolicies = require('./safeguards');
+const { runPolicies, loadPolicyFiles } = require('./safeguards');
 const { getApp, getDeployProfiles } = require('@serverless/platform-sdk');
 const chalk = require('chalk');
 const yml = require('yamljs');
@@ -45,7 +45,13 @@ class ServerlessSafeguardPlugin {
           validate: {
             lifecycleEvents: ['validate'],
             usage: 'Validate the config against policy',
-            options: {},
+            options: {
+              'policy-file': {
+                usage:
+                  'specify a policy file to use when validating, in addition to any defined in the serverless.yaml',
+                required: false,
+              },
+            },
           },
         },
       },
@@ -69,8 +75,14 @@ class ServerlessSafeguardPlugin {
       await this.sls.pluginManager.spawn('package');
     }
   }
-  doValidate() {
-    runPolicies(this);
+  async doValidate() {
+    const policyFile = this.options['policy-file'];
+    // parse and load the policy
+    if (policyFile) {
+      // policyFiles could be a string or an array of strings
+      this.extendedPolicies = await loadPolicyFiles(this, [].concat(policyFile));
+    }
+    await runPolicies(this);
   }
 
   async export() {

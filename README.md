@@ -10,6 +10,7 @@
 - **Proactive** - Safeguards are evaluated _before_ any infrastructure is provisioned by evaluating the generated cloud formation template and serverless.yml.
 - **Environment-specific** - Policies can be associated with stages you can enforce different policies on development environments and production environments.
 - **Independent** - While policies will get run when you deploy, you can run and validate the policies as a standalone without deploying.
+- **Enforceable** - You can run the `safeguards validate` command while specifying additional policy files in addition to policies specified in serverless.yaml.
 
 ## Docs
 
@@ -91,7 +92,9 @@ The policy checks are performed as a part of the `serverless deploy` command.
 This will load the safeguard settings from the `serverless.yml` file to
 determine which policies to evaluate.
 
-In addition, you can simply validate the configuration without doing a deploy.
+In addition, you simply can validate the configuration without doing a deploy.
+When validating standalone, you can specify additional policy files - zero, one or several - whose policies
+will be validated in addition to any policies in the `serverless.yaml`.
 
 **Example deploy**
 
@@ -159,6 +162,57 @@ Serverless: Safeguards Results:
 
 Serverless: Safeguards Summary: 6 passed, 0 warnings, 2 errors
 ```
+
+**Example standalone validate with additional policy files**
+
+```
+$ sls safeguards validate --policy-file /home/policies/centralpolicyone.yaml --policy-file /home/policies/complianceglobal.yaml
+...
+Serverless: Safeguards Results:
+
+   Summary --------------------------------------------------
+
+   passed - require-dlq
+   passed - allowed-runtimes
+   passed - no-secret-env-vars
+   passed - allowed-stages
+   failed - require-cfn-role
+   passed - allowed-regions
+   passed - framework-version
+   failed - no-wild-iam-role-statements
+
+   Details --------------------------------------------------
+
+   1) Failed - no cfnRole set
+      details: https://git.io/fhpFZ
+      Require the cfnRole option, which specifies a particular role for CloudFormation to assume while deploying.
+
+
+   2) Failed - iamRoleStatement granting Resource='*'. Wildcard resources in iamRoleStatements are not permitted.
+      details: https://git.io/fjfk7
+      Prevent "*" permissions being used in AWS IAM Roles by checking for wildcards on Actions and Resources in grant statements.
+
+
+Serverless: Safeguards Summary: 6 passed, 0 warnings, 2 errors
+```
+
+When providing additional policy files via `--policy-file`, these files **must** contain only policies, per the description in this file.
+The contents match _precisely_ what would be put in the `custom.safeguards` section of a normal `serverless.yaml` file.
+For example:
+
+```yaml
+- title: Restrict runtime
+  safeguard: allowed-runtimes
+  description: Only nodejs 8.10 allowed
+  enforcementLevel: error # if this policy fails, then BLOCK the deployment
+  config: # this configures the allowed-runtimes safeguard
+    - nodejs8.10
+  stage: # this policy will only be enforced if you deploy to prod or qa
+    - prod
+    - qa
+```
+
+The above is the _entire_ policy file.
 
 ### Policy check results
 
