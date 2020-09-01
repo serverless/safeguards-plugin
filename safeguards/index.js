@@ -3,22 +3,31 @@
 const { readdir, readFile } = require('fs-extra');
 const yml = require('yamljs');
 const path = require('path');
-const { get, fromPairs, cloneDeep, omit } = require('lodash');
+const { get, fromPairs, cloneDeep, omit, flatten } = require('lodash');
 const chalk = require('chalk');
+const parse = require('./parse');
 
 // NOTE: not using path.join because it strips off the leading
 const loadPolicy = (policyPath, safeguardName) =>
   require(`${policyPath || './policies'}/${safeguardName}`);
 
+async function loadPolicyFiles(ctx, policyFiles) {
+  // go through each file, read it, and get the safeguards policies
+  const policies = await Promise.all(
+    policyFiles.map(async (policyFile) => {
+      const content = await readFile(policyFile);
+      const data = parse(ctx, policyFile, content);
+      return data || [];
+    })
+  );
+  // now flatten the arrays
+  return flatten(policies);
+}
+
 async function runPolicies(ctx) {
   const basePath = ctx.sls.config.servicePath;
   const stage = ctx.provider.options.stage;
-
-  /**
-   * Loads all the policy configurations from the custom.safeguards
-   * object from serverless.yml.
-   */
-  const policyConfigs = (get(ctx.sls.service, 'custom.safeguards') || []).map((policy) => {
+  const policyProcessor = (policy) => {
     const policyConfig = {
       safeguardName: policy.safeguard,
       safeguardConfig: policy.config,
@@ -37,8 +46,16 @@ async function runPolicies(ctx) {
     }
 
     return policyConfig;
-  });
+  };
 
+  /**
+   * Loads all the policy configurations from the custom.safeguards
+   * object from serverless.yml.
+   * Appends policies from the loaded policies file
+   */
+  const configFileDefinedSafeguards = get(ctx.sls.service, 'custom.safeguards') || [];
+  const extendedPolicies = ctx.extendedPolicies || [];
+  const policyConfigs = configFileDefinedSafeguards.concat(extendedPolicies).map(policyProcessor);
   if (policyConfigs.length === 0) {
     return;
   }
@@ -177,4 +194,6 @@ async function runPolicies(ctx) {
 }
 
 module.exports = runPolicies;
+module.exports.runPolicies = runPolicies;
 module.exports.loadPolicy = loadPolicy;
+module.exports.loadPolicyFiles = loadPolicyFiles;
