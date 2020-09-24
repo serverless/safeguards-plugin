@@ -44,6 +44,7 @@
     "eslint": "^7.9.0",
     "eslint-plugin-import": "^2.22.0",
     "git-list-updated": "^1.2.1",
+    "github-release-from-cc-changelog": "^2.2.0",
     "lint-staged": "^10.4.0",
     "mocha": "^6.2.3",
     "nyc": "^15.1.0",
