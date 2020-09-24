@@ -1,3 +1,5 @@
+# Version tags only
+
 name: Publish
 
 on:
@@ -6,18 +8,25 @@ on:
       - v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
-  npmPublish:
-    name: Publish to npm
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
+    env:
+      # Ensure release notes are published by our `serverless-ci` bot
+      # (If instead we'd use unconditionally provided secrets.GITHUB_TOKEN then
+      # "github-actions" user will be listed as release publisher)
+      GITHUB_TOKEN: ${{ secrets.USER_GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Retrieve node_modules from cache
+      - name: Retrieve dependencies from cache
         uses: actions/cache@v2
         with:
-          path: node_modules
-          key: node-modules-v14-${{ runner.os }}-refs/heads/master-${{ hashFiles('package.json') }}
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-v14-${{ runner.os }}-refs/heads/master-${{ hashFiles('package.json') }}
 
       - name: Install Node.js and npm
         uses: actions/setup-node@v1
@@ -30,5 +39,16 @@ jobs:
         #       as it appears actions/setup-node sets own value
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+
+      # Note: No need to install dependencies as:
+      # 1. We have retrieved cached `node_modules` for very same `package.json`
+      #    as stored with recent `master `build
+      # 2. If for some reason cache retrieval fails `npx` will download and install
+      #    `github-release-from-cc-changelog`
+
+      - name: Publish release notes
         run: |
-          npm publish
+          TEMP_ARRAY=($(echo $GITHUB_REF | tr "/" "\n"))
+          TAG=${TEMP_ARRAY[@]: -1}
+          npx github-release-from-cc-changelog $TAG
