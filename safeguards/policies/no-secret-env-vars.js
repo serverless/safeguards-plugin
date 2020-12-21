@@ -10,6 +10,9 @@ const truffleHogRegexes = {
   'SSH (DSA) private key': new RegExp('-----BEGIN DSA PRIVATE KEY-----'),
   'SSH (EC) private key': new RegExp('-----BEGIN EC PRIVATE KEY-----'),
   'PGP private key block': new RegExp('-----BEGIN PGP PRIVATE KEY BLOCK-----'),
+  'PKCS8 private key': new RegExp('-----BEGIN PRIVATE KEY-----'),
+  'PKCS8 encrypted private key': new RegExp('-----BEGIN ENCRYPTED PRIVATE KEY-----'),
+  'EVP private key': new RegExp('-----BEGIN ANY PRIVATE KEY-----'),
   'Facebook Oauth': new RegExp(
     '[f|F][a|A][c|C][e|E][b|B][o|O][o|O][k|K].*[\'|"][0-9a-f]{32}[\'|"]'
   ),
