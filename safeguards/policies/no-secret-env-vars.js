@@ -4,7 +4,7 @@ const { entries, fromPairs, values } = require('lodash');
 
 // from https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
 const truffleHogRegexes = {
-  'Slack Token': new RegExp('(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})'),
+  'Slack Token': new RegExp('xox[pboars](-[0-9a-zA-Z]{10,48}){3,4}'),
   'RSA private key': new RegExp('-----BEGIN RSA PRIVATE KEY-----'),
   'SSH (OPENSSH) private key': new RegExp('-----BEGIN OPENSSH PRIVATE KEY-----'),
   'SSH (DSA) private key': new RegExp('-----BEGIN DSA PRIVATE KEY-----'),
