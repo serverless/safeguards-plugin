@@ -63,6 +63,28 @@ class ServerlessSafeguardPlugin {
       'before:safeguards:validate:validate': this.doPackage,
       'safeguards:validate:validate': this.doValidate,
     };
+
+    this.sls.configSchemaHandler.defineCustomProperties({
+      properties: {
+        safeguards: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              safeguard: { type: 'string' },
+              title: { type: 'string' },
+              description: { type: 'string' },
+              enforcementLevel: { enum: ['warning', 'error'] },
+              config: {},
+              path: { type: 'string' },
+              stage: { type: ['string', 'array'] },
+            },
+            required: ['safeguard'],
+            additionalProperties: false,
+          },
+        },
+      },
+    });
   }
 
   beforeDeployResources() {
