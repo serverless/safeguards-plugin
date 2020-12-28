@@ -6,6 +6,7 @@ const path = require('path');
 const { get, fromPairs, cloneDeep, omit, flatten } = require('lodash');
 const chalk = require('chalk');
 const parse = require('./parse');
+const bent = require('bent');
 
 // NOTE: not using path.join because it strips off the leading
 const loadPolicy = (policyPath, safeguardName) =>
@@ -15,7 +16,27 @@ async function loadPolicyFiles(ctx, policyFiles) {
   // go through each file, read it, and get the safeguards policies
   const policies = await Promise.all(
     policyFiles.map(async (policyFile) => {
-      const content = await readFile(policyFile);
+      // depends on the url
+      let content;
+      try {
+        const u = new URL(policyFile);
+        switch (u.protocol) {
+          case 'http':
+          case 'https': {
+            const res = await bent()(policyFile);
+            content = await res.text();
+            break;
+          }
+          case 'file':
+            content = await readFile(u.pathname);
+            break;
+          default:
+            throw Error(`unsupported URL ${policyFile}`);
+        }
+      } catch (e) {
+        // we had an error, so we just treat it like a file
+        content = await readFile(policyFile);
+      }
       const data = parse(ctx, policyFile, content);
       return data || [];
     })
