@@ -1,9 +1,9 @@
 'use strict';
 
 const { runPolicies, loadPolicyFiles } = require('./safeguards');
-const { getApp, getDeployProfiles } = require('@serverless/platform-sdk');
 const chalk = require('chalk');
 const yml = require('yamljs');
+const { ServerlessSDK } = require('@serverless/platform-client');
 
 class ServerlessSafeguardPlugin {
   constructor(sls, options) {
@@ -132,11 +132,8 @@ class ServerlessSafeguardPlugin {
       );
       process.exit(-1);
     }
-    const app = await getApp({
-      tenant: orgName,
-      token: accessKey,
-      app: appName,
-    });
+    const sdk = new ServerlessSDK({ accessKey });
+    const app = await sdk.apps.get({ orgName, appName });
 
     /**
      * The deploymentProfiles object returns {default: ..., stage: {dev:..., prod:... }}
@@ -149,10 +146,7 @@ class ServerlessSafeguardPlugin {
 
     let profiles = [];
     try {
-      profiles = await getDeployProfiles({
-        accessKey,
-        tenant: orgName,
-      });
+      profiles = await sdk.deploymentProfiles.list({ orgName });
     } catch (err) {
       this.sls.cli.log(chalk.red('Failed to get the deployment profile for unknown reason'));
       this.sls.cli.log(err);

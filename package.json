@@ -26,7 +26,7 @@
     "prettify:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier --write --ignore-path .eslintignore"
   },
   "dependencies": {
-    "@serverless/platform-sdk": "^2.3.2",
+    "@serverless/platform-client": "^4.2.0",
     "chalk": "^4.1.0",
     "fs-extra": "^9.0.1",
     "iso8601-duration": "^1.2.0",
