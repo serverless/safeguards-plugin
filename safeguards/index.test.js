@@ -6,9 +6,6 @@ const { cloneDeep } = require('lodash');
 const chalk = require('chalk');
 const { expect } = require('chai');
 
-let getSafeguardsResolution;
-const getSafeguards = async () => getSafeguardsResolution;
-
 const realStdoutWrite = process.stdout.write;
 
 describe('safeguards', () => {
@@ -30,11 +27,6 @@ describe('safeguards', () => {
     });
 
     runPolicies = proxyquire('./', {
-      '@serverless/platform-sdk': {
-        getSafeguards,
-        getAccessKeyForTenant: async () => 'access-key',
-        urls: { frontendUrl: 'https://dashboard.serverless.com/' },
-      },
       'node-dir': {
         readFiles: async () => {},
       },
@@ -99,7 +91,6 @@ describe('safeguards', () => {
     });
 
     it('does nothing when there are no safeguards', async () => {
-      getSafeguardsResolution = [];
       const ctx = cloneDeep(defualtCtx);
       ctx.sls.service.custom.safeguards = false;
       await runPolicies(ctx);
