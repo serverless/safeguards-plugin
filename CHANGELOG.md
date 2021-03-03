@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.1](https://github.com/serverless/safeguards-plugin/compare/v1.1.0...v1.1.1) (2021-03-03)
+
+### Maintenance Improvements
+
+- Remove dependency on `@serverless/platform-sdk` and replace it with `@serverless/platform-client` ([#21](https://github.com/serverless/safeguards-plugin/pull/21)) ([a1bbfd0](https://github.com/serverless/safeguards-plugin/commit/a1bbfd069daea3769cb1183de7ff2848519f0bd1)) ([Piotr Grzesik](https://github.com/pgrzesik))
+
 ## [1.1.0](https://github.com/serverless/safeguards-plugin/compare/v1.0.1...v1.1.0) (2020-09-24)
 
 ### Features
