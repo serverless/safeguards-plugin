@@ -29,16 +29,19 @@ class ServerlessSafeguardPlugin {
                 usage: 'Specify the org if you do not have an org set in serverless.yml',
                 shortcut: 'o',
                 required: false,
+                type: 'string',
               },
               app: {
                 usage: 'Specify the app if you do not have an app set in the serverless.yml',
                 shortcut: 'a',
                 required: false,
+                type: 'string',
               },
               service: {
                 usage: 'Specify the service if you do not have a service set in the serverless.yml',
                 shortcut: 's',
                 required: false,
+                type: 'string',
               },
             },
           },
@@ -50,6 +53,7 @@ class ServerlessSafeguardPlugin {
                 usage:
                   'specify a policy file to use when validating, in addition to any defined in the serverless.yaml',
                 required: false,
+                type: 'string',
               },
             },
           },
