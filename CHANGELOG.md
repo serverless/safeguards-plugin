@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/serverless/safeguards-plugin/compare/v1.2.0...v1.2.1) (2022-01-14)
+
+### Bug Fixes
+
+- Adapt schema to strict validation mode ([#28](https://github.com/serverless/safeguards-plugin/pull/28)) ([6a0c28e](https://github.com/serverless/safeguards-plugin/commit/6a0c28e48ee4c12a0100c0f46b24f1e5bffa4e47)) ([Piotr Grzesik](https://github.com/pgrzesik))
+
 ## [1.2.0](https://github.com/serverless/safeguards-plugin/compare/v1.1.1...v1.2.0) (2021-05-04)
 
 ### Features
