@@ -81,7 +81,9 @@ class ServerlessSafeguardPlugin {
               enforcementLevel: { enum: ['warning', 'error'] },
               config: {},
               path: { type: 'string' },
-              stage: { type: ['string', 'array'] },
+              stage: {
+                anyOf: [{ type: 'string' }, { type: 'array' }],
+              },
             },
             required: ['safeguard'],
             additionalProperties: false,
